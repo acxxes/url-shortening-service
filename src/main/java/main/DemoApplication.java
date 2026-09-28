@@ -56,6 +56,44 @@ public class DemoApplication {
      * GET /shorten/{code}/stats | SELECT including the counter             | 1 row -> 200          | 0 rows -> 404
      */
 
+    /*
+     * Request flow through the layers:
+     *
+     *   HTTP request (JSON)
+     *         │
+     *         ▼
+     *   ┌──────────────┐   speaks HTTP: paths, status codes, JSON
+     *   │  Controller  │   works with DTOs
+     *   └──────┬───────┘
+     *          ▼
+     *   ┌──────────────┐   speaks "business": rules, decisions, exceptions
+     *   │   Service    │   converts DTO ⇄ Entity
+     *   └──────┬───────┘
+     *          ▼
+     *   ┌──────────────┐   speaks "database": save, find, delete
+     *   │  Repository  │   works with Entities
+     *   └──────┬───────┘
+     *          ▼
+     *      PostgreSQL
+     *
+        1. Separation of concerns. Each class has one job. When a status code is wrong, you look in the controller.
+           When a rule is wrong, you look in the service.
+        2. Testability. You can test the service with a fake repository (Phase 9) without a database or HTTP.
+        3. Change isolation. You can rename a DB column without breaking your API contract, or change the API without touching the DB.
+     */
+
+    /*
+    Which status code?	                Controller
+    Read {code} from the URL	        Controller (@PathVariable)
+    Read JSON body	                    Controller (@RequestBody)
+    Validate input format (Phase 7)	    DTO annotations + @Valid in the controller
+    "Code doesn't exist → error"	    Service (throws an exception)
+    Generate a random code	            Service (or a small helper class it uses)
+    Increment access count	            Service → Repository
+    SQL / queries	                    Repository
+    Entity ⇄ DTO conversion	        Service (using the DTO's factory method)
+    Turn exceptions into JSON errors	@RestControllerAdvice (Phase 7)
+     */
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
