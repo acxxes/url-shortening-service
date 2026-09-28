@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class RestServiceApplication {
 
     //TODO
     // - learn postgreSQL, establish API with the 5 queries behind HTTP
@@ -95,8 +95,15 @@ public class DemoApplication {
     Turn exceptions into JSON errors	@RestControllerAdvice (Phase 7)
      */
 
+    /*
+    Java object (Entity)  <-- Hibernate translates -->  table row
+    Book.title                                           books.title
+    repository.save(book)          -->                   INSERT / UPDATE
+    repository.findByIsbn(...)     -->                   SELECT ... WHERE isbn = ?
+     */
+
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(RestServiceApplication.class, args);
     }
 
 }

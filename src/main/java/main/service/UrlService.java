@@ -11,7 +11,4 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    public void test() {
-    }
-
 }
