@@ -1,4 +1,4 @@
-package main.dto;
+package com.github.acxxes.urlshortener.dto;
 
 // data transfer object
 // special class whose job is to carry data

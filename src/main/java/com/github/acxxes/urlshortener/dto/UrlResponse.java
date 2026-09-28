@@ -1,4 +1,4 @@
-package main.dto;
+package com.github.acxxes.urlshortener.dto;
 
 import java.time.Instant;
 

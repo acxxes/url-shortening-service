@@ -1,4 +1,4 @@
-package main.entity;
+package com.github.acxxes.urlshortener.entity;
 
 import jakarta.persistence.*;
 
@@ -9,7 +9,7 @@ import java.time.Instant;
 public class Url {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)

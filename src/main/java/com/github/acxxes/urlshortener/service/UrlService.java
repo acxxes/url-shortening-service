@@ -1,6 +1,6 @@
-package main.service;
+package com.github.acxxes.urlshortener.service;
 
-import main.repository.UrlRepository;
+import com.github.acxxes.urlshortener.repository.UrlRepository;
 import org.springframework.stereotype.Service;
 
 @Service
