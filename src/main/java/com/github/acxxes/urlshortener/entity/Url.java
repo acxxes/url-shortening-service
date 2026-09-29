@@ -30,6 +30,11 @@ public class Url {
     protected Url() {
     }
 
+    public Url(String url, String shortCode) {
+        this.url = url;
+        this.shortCode = shortCode;
+    }
+
     // runs before INSERT
     @PrePersist
     void onCreate() {
