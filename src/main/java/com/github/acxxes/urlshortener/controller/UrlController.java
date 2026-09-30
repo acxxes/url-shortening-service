@@ -18,8 +18,8 @@ public class UrlController {
 
     // Spring decides based on HTTP method + path what to choose
 
-    // GET /shorten
-    @GetMapping
+//    // GET /shorten
+//    @GetMapping
 
     // GET /shorten/{shortCode}
     @GetMapping("/{shortCode}")
@@ -27,25 +27,25 @@ public class UrlController {
         return urlService.findByShortCode(shortCode);
     }
 
-    // GET /shorten/{shortCode}/status
-    @GetMapping("/{shortCode}/status")
-    public UrlStatsResponse get(@PathVariable String shortCode) {
-    }
-
-    // POST /url
-    // @RequestBody Jackson reads JSON and calls the records constructor
-    @PostMapping
-    public ResponseEntity<UrlResponse> create(@RequestBody UrlRequest request) {
-    }
-
-    // PUT /shorten/{shortCode}
-    @PutMapping("/{shortCode}")
-
-    // PATCH /shorten/{shortCode} (partial update, may not use is)
-    @PatchMapping("/{shortCode}")
-
-    // DELETE /shorten/{shortCode}
-    @DeleteMapping("/{shortCode}")
+//    // GET /shorten/{shortCode}/stats
+//    @GetMapping("/{shortCode}/stats")
+//    public UrlStatsResponse getStats(@PathVariable String shortCode) {
+//    }
+//
+//    // POST /url
+//    // @RequestBody Jackson reads JSON and calls the records constructor
+//    @PostMapping
+//    public ResponseEntity<UrlResponse> create(@RequestBody UrlRequest request) {
+//    }
+//
+//    // PUT /shorten/{shortCode}
+//    @PutMapping("/{shortCode}")
+//
+//    // PATCH /shorten/{shortCode} (partial update, may not use is)
+//    @PatchMapping("/{shortCode}")
+//
+//    // DELETE /shorten/{shortCode}
+//    @DeleteMapping("/{shortCode}")
 
 
 }

@@ -1,0 +1,8 @@
+@host = http://localhost:8080
+@shortCode = yt-music
+
+### GET
+GET {{host}}/shorten/{{shortCode}}
+
+### GET unknown -> expect 404
+GET {{host}}/shorten/does-not-exist
