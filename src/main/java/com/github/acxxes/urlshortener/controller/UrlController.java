@@ -1,8 +1,8 @@
-//package main.controller;
+//package com.github.acxxes.urlshortener.controller;
 //
-//import main.dto.UrlRequest;
-//import main.dto.UrlResponse;
-//import main.service.UrlService;
+//import com.github.acxxes.urlshortener.dto.UrlRequest;
+//import com.github.acxxes.urlshortener.dto.UrlResponse;
+//import com.github.acxxes.urlshortener.service.UrlService;
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.web.bind.annotation.*;
 //
@@ -21,8 +21,8 @@
 //        // WIP
 //    }
 //
-//    // GET /shorten/{short_code}
-//    @GetMapping("/{short_code}")
+//    // GET /shorten/{shortCode}
+//    @GetMapping("/{shortCode}")
 //    public UrlResponse get(@PathVariable String shortCode) {
 //        // WIP
 //    }

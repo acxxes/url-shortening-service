@@ -10,7 +10,7 @@ public class Url {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String url;
@@ -57,7 +57,7 @@ public class Url {
         return createdAt;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
