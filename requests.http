@@ -4,5 +4,5 @@
 ### GET
 GET {{host}}/shorten/{{shortCode}}
 
-### GET unknown -> expect 404
+### GET unknown input -> expecting 404 error
 GET {{host}}/shorten/does-not-exist
