@@ -16,12 +16,7 @@ public class UrlService {
 
     public UrlResponse findByShortCode(String shortCode) {
         return urlRepository.findByShortCode(shortCode)
-                .map(urlResponse -> new UrlResponse(
-                        urlResponse.getId(),
-                        urlResponse.getUrl(),
-                        urlResponse.getShortCode(),
-                        urlResponse.getCreatedAt(),
-                        urlResponse.getUpdatedAt()))
+                .map(UrlResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
                 ));
