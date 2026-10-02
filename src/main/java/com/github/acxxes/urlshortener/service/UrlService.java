@@ -1,10 +1,13 @@
 package com.github.acxxes.urlshortener.service;
 
 import com.github.acxxes.urlshortener.dto.UrlResponse;
+import com.github.acxxes.urlshortener.entity.Url;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 @Service
 public class UrlService {
@@ -21,5 +24,17 @@ public class UrlService {
                         HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
                 ));
     }
+
+    public UrlResponse createShortUrl(String url) {
+        String generatedShortCode = generateShortCode();
+        Url saved = urlRepository.save(new Url(url, generatedShortCode));
+        return UrlResponse.from(saved);
+    }
+
+    // TODO phase 6
+    private String generateShortCode() {
+        return UUID.randomUUID().toString().substring(0, 5);
+    }
+
 
 }
