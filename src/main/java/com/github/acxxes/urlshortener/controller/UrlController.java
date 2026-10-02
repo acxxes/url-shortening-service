@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class UrlController {
     private final UrlService urlService;
 
+    // Spring decides based on HTTP method + path what to choose
+
     public UrlController(UrlService urlService) {
         this.urlService = urlService;
     }
-
-    // Spring decides based on HTTP method + path what to choose
-
-//    // GET /shorten
-//    @GetMapping
 
     // GET /shorten/{shortCode}
     // curl: curl.exe -i http://localhost:8080/shorten/{shortCode}
@@ -29,27 +26,33 @@ public class UrlController {
         return urlService.findByShortCode(shortCode);
     }
 
-//    // GET /shorten/{shortCode}/stats
-//    @GetMapping("/{shortCode}/stats")
-//    public UrlStatsResponse getStats(@PathVariable String shortCode) {
-//    }
-//
+    // curl: curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d "@http-tests/create.json"
+    // works with PowerShell 7.3+ (check version: $PSVersionTable.PSVersion)
+    // curl: curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d '{"url":"https://example.com"}'
+
     // POST /shorten
     // @RequestBody Jackson reads JSON and calls the records constructor
-    // curl: curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d "@http-tests/create.json"
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UrlResponse create(@RequestBody UrlRequest urlRequest) {
         return urlService.createShortUrl(urlRequest.url());
     }
-//
-//    // PUT /shorten/{shortCode}
+
+    // GET /shorten
+//      @GetMapping
+
+    // GET /shorten/{shortCode}/stats
+//    @GetMapping("/{shortCode}/stats")
+//    public UrlStatsResponse getStats(@PathVariable String shortCode) {
+//    }
+
+    // PUT /shorten/{shortCode}
 //    @PutMapping("/{shortCode}")
-//
-//    // PATCH /shorten/{shortCode} (partial update, may not use is)
+
+    // PATCH /shorten/{shortCode} (partial update, may not use is)
 //    @PatchMapping("/{shortCode}")
-//
-//    // DELETE /shorten/{shortCode}
+
+    // DELETE /shorten/{shortCode}
 //    @DeleteMapping("/{shortCode}")
 
 
