@@ -36,17 +36,16 @@ public class UrlService {
                 ));
     }
 
+    // POST http://localhost:8080/shorten
     public UrlResponse createShortUrl(String url) {
         String generatedShortCode = generateShortCode();
         Url saved = urlRepository.save(new Url(url, generatedShortCode));
         return UrlResponse.from(saved);
     }
 
-
     // TODO phase 6
     private String generateShortCode() {
         return UUID.randomUUID().toString().substring(0, 5);
     }
-
 
 }

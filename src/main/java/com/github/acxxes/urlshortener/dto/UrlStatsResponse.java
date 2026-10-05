@@ -23,4 +23,5 @@ public record UrlStatsResponse(long id,
                 url.getAccessCount()
         );
     }
+
 }

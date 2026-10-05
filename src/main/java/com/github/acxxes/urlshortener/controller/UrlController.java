@@ -5,7 +5,6 @@ import com.github.acxxes.urlshortener.dto.UrlResponse;
 import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.service.UrlService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,24 +38,15 @@ public class UrlController {
     // POST /shorten
     // @RequestBody Jackson reads JSON and calls the records constructor
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) // returns 201
     public UrlResponse create(@RequestBody UrlRequest urlRequest) {
         return urlService.createShortUrl(urlRequest.url());
     }
 
-
-    // GET /shorten
-//      @GetMapping
-
-
     // PUT /shorten/{shortCode}
 //    @PutMapping("/{shortCode}")
 
-    // PATCH /shorten/{shortCode} (partial update, may not use is)
-//    @PatchMapping("/{shortCode}")
-
     // DELETE /shorten/{shortCode}
 //    @DeleteMapping("/{shortCode}")
-
 
 }
