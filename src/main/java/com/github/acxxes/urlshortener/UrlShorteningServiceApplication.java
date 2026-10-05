@@ -12,6 +12,7 @@ public class UrlShorteningServiceApplication {
 
     //TODO
     // - learn PostgreSQL, establish API with the 5 queries behind HTTP
+    // - make the access_count work
 
     public static void main(String[] args) {
         SpringApplication.run(UrlShorteningServiceApplication.class, args);

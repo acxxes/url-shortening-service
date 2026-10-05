@@ -26,10 +26,16 @@ public class UrlController {
         return urlService.findByShortCode(shortCode);
     }
 
-    // curl: curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d "@http-tests/create.json"
-    // works with PowerShell 7.3+ (check version: $PSVersionTable.PSVersion)
-    // curl: curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d '{"url":"https://example.com"}'
+    // GET /shorten/{shortCode}/stats
+    // curl: curl.exe -i http://localhost:8080/shorten/{shortCode}/stats
+    @GetMapping("/{shortCode}/stats")
+    public UrlStatsResponse getStats(@PathVariable String shortCode) {
+        return urlService.findByShortCodeWithStats(shortCode);
+    }
 
+    // curl: curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d "@http-tests/create.json"
+    // works with PowerShell 7.3+ (check version: pwsh --version)
+    // curl: curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d '{"url":"https://example.com"}'
     // POST /shorten
     // @RequestBody Jackson reads JSON and calls the records constructor
     @PostMapping
@@ -38,13 +44,10 @@ public class UrlController {
         return urlService.createShortUrl(urlRequest.url());
     }
 
+
     // GET /shorten
 //      @GetMapping
 
-    // GET /shorten/{shortCode}/stats
-//    @GetMapping("/{shortCode}/stats")
-//    public UrlStatsResponse getStats(@PathVariable String shortCode) {
-//    }
 
     // PUT /shorten/{shortCode}
 //    @PutMapping("/{shortCode}")

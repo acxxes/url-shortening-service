@@ -1,6 +1,7 @@
 package com.github.acxxes.urlshortener.service;
 
 import com.github.acxxes.urlshortener.dto.UrlResponse;
+import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.entity.Url;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,19 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
+    // GET http://localhost:8080/shorten/{shortCode}
     public UrlResponse findByShortCode(String shortCode) {
         return urlRepository.findByShortCode(shortCode)
                 .map(UrlResponse::from)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
+                ));
+    }
+
+    // GET http://localhost:8080/shorten/{shortCode}/stats
+    public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
+        return urlRepository.findByShortCode(shortCode)
+                .map(UrlStatsResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
                 ));
@@ -30,6 +41,7 @@ public class UrlService {
         Url saved = urlRepository.save(new Url(url, generatedShortCode));
         return UrlResponse.from(saved);
     }
+
 
     // TODO phase 6
     private String generateShortCode() {
