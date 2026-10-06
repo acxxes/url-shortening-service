@@ -1,16 +1,16 @@
 package com.github.acxxes.urlshortener.controller;
 
-import com.github.acxxes.urlshortener.dto.URLRequest;
-import com.github.acxxes.urlshortener.dto.URLResponse;
-import com.github.acxxes.urlshortener.dto.URLStatsResponse;
-import com.github.acxxes.urlshortener.service.URLService;
+import com.github.acxxes.urlshortener.dto.UrlRequest;
+import com.github.acxxes.urlshortener.dto.UrlResponse;
+import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
+import com.github.acxxes.urlshortener.service.UrlService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/shorten") // common base path for all methods
-public class URLController {
-    private final URLService urlService;
+public class UrlController {
+    private final UrlService urlService;
 
     // Spring decides based on HTTP method + path what to choose
     // @RequestBody Jackson reads JSON and calls the records constructor
@@ -20,7 +20,7 @@ public class URLController {
     @RequestBody = data being sent (can contain anything)
      */
 
-    public URLController(URLService urlService) {
+    public UrlController(UrlService urlService) {
         this.urlService = urlService;
     }
 
@@ -35,10 +35,10 @@ public class URLController {
      * }</pre>
      *
      * @param shortCode the short code from the request path
-     * @return the entry, as {@link URLResponse}
+     * @return the entry, as {@link UrlResponse}
      */
     @GetMapping("/{shortCode}")
-    public URLResponse get(@PathVariable String shortCode) {
+    public UrlResponse get(@PathVariable String shortCode) {
         return urlService.findByShortCode(shortCode);
     }
 
@@ -53,10 +53,10 @@ public class URLController {
      * }</pre>
      *
      * @param shortCode the short code from the request path
-     * @return {@link URLStatsResponse} the entry including its access count
+     * @return {@link UrlStatsResponse} the entry including its access count
      */
     @GetMapping("/{shortCode}/stats")
-    public URLStatsResponse getStats(@PathVariable String shortCode) {
+    public UrlStatsResponse getStats(@PathVariable String shortCode) {
         return urlService.findByShortCodeWithStats(shortCode);
     }
 
@@ -75,11 +75,11 @@ public class URLController {
      * }</pre>
      *
      * @param urlRequest the JSON body, containing the long URL to shorten
-     * @return {@link URLResponse} the created entry including its generated short code
+     * @return {@link UrlResponse} the created entry including its generated short code
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public URLResponse create(@RequestBody URLRequest urlRequest) {
+    public UrlResponse create(@RequestBody UrlRequest urlRequest) {
         return urlService.createShortUrl(urlRequest.url());
     }
 
@@ -104,8 +104,8 @@ public class URLController {
     //TODO WIP
 
     // PUT /shorten/{shortCode}
-//    @PutMapping("/{shortCode}")
-//    public UrlResponse update(@PathVariable String shortCode) {
-//    }
+    @PutMapping("/{shortCode}")
+    public UrlResponse update(@PathVariable String shortCode) {
+    }
 
 }
