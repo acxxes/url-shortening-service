@@ -20,37 +20,38 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    // GET http://localhost:8080/shorten/{shortCode}
     public UrlResponse findByShortCode(String shortCode) {
         Url url = findUrlOrThrow(shortCode);
         return UrlResponse.from(url);
     }
 
-    // GET http://localhost:8080/shorten/{shortCode}/stats
     public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
         Url url = findUrlOrThrow(shortCode);
         return UrlStatsResponse.from(url);
     }
 
-    // POST http://localhost:8080/shorten
     public UrlResponse createShortUrl(String url) {
         String generatedShortCode = generateShortCode();
         Url saved = urlRepository.save(new Url(url, generatedShortCode));
         return UrlResponse.from(saved);
     }
 
-    // PUT http://localhost:8080/shorten/{shortCode}
-//    public UrlResponse updateShortUrl(String shortCode, String newUrl) {
-//    }
+    @Transactional
+    public UrlResponse updateUrl(String shortCode, String newUrl) {
+        Url url = findUrlOrThrow(shortCode);
+        url.setUrl(newUrl);
+        urlRepository.flush(); // guarantees flush before the mapping, so updatedAt gets updated
+        return UrlResponse.from(url);
+    }
 
-    // DELETE http://localhost:8080/shorten/{shortCode}
     @Transactional
     public void deleteByShortCode(String shortCode) {
         findUrlOrThrow(shortCode);
         urlRepository.deleteByShortCode(shortCode);
     }
 
-    // TODO phase 6
+    //TODO
+    // - phase 6
     private String generateShortCode() {
         return UUID.randomUUID().toString().substring(0, 5);
     }

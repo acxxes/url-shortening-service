@@ -69,7 +69,7 @@ public class UrlController {
      * <pre>{@code
      * curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d "@http-tests/create.json"
      * }</pre>
-     * Works with PowerShell 7.3+ (check version: pwsh --version):
+     * Works with PowerShell 7.3+ (check version: $PSVersionTable.PSVersion):
      * <pre>{@code
      * curl.exe -i -X POST http://localhost:8080/shorten -H "Content-Type: application/json" -d '{"url":"https://example.com"}'
      * }</pre>
@@ -81,6 +81,30 @@ public class UrlController {
     @ResponseStatus(HttpStatus.CREATED)
     public UrlResponse create(@RequestBody UrlRequest urlRequest) {
         return urlService.createShortUrl(urlRequest.url());
+    }
+
+    /**
+     * Replaces the target URL of the entry with the given code.
+     * <p>
+     * Responds with 200, or 404 if the code does not exist.
+     * <p>
+     * Execute in the terminal with:
+     * <pre>{@code
+     * curl.exe -i -X PUT http://localhost:8080/shorten/{shortCode} -H "Content-Type: application/json" -d "@http-tests/update.json"
+     * }</pre>
+     * Works with PowerShell 7.3+ (check version: $PSVersionTable.PSVersion):
+     * <pre>{@code
+     * curl.exe -i -X PUT http://localhost:8080/shorten/{shortCode} -H "Content-Type: application/json" -d '{"url":"https://updated-url.com"}'
+     * }</pre>
+     *
+     * @param shortCode  the short code from the request path
+     * @param urlRequest the JSON body, containing the new URL
+     * @return {@link UrlResponse} the updated entry including the new URL
+     */
+    @PutMapping("/{shortCode}")
+    public UrlResponse update(@PathVariable String shortCode,
+                              @RequestBody UrlRequest urlRequest) {
+        return urlService.updateUrl(shortCode, urlRequest.url());
     }
 
     /**
@@ -100,10 +124,5 @@ public class UrlController {
     public void delete(@PathVariable String shortCode) {
         urlService.deleteByShortCode(shortCode);
     }
-
-//    // PUT /shorten/{shortCode}
-//    @PutMapping("/{shortCode}")
-//    public UrlResponse update(@PathVariable String shortCode) {
-//    }
 
 }
