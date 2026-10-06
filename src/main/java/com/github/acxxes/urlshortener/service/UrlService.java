@@ -21,19 +21,15 @@ public class UrlService {
     }
 
     public UrlResponse findByShortCode(String shortCode) {
-        Url url = findUrlOrThrow(shortCode);
-        return UrlResponse.from(url);
+        return UrlResponse.from(findUrlOrThrow(shortCode));
     }
 
     public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
-        Url url = findUrlOrThrow(shortCode);
-        return UrlStatsResponse.from(url);
+        return UrlStatsResponse.from(findUrlOrThrow(shortCode));
     }
 
     public UrlResponse createShortUrl(String url) {
-        String generatedShortCode = generateShortCode();
-        Url saved = urlRepository.save(new Url(url, generatedShortCode));
-        return UrlResponse.from(saved);
+        return UrlResponse.from(newUrlDatabaseEntry(url));
     }
 
     @Transactional
@@ -58,8 +54,15 @@ public class UrlService {
 
     private Url findUrlOrThrow(String shortCode) {
         return urlRepository.findByShortCode(shortCode)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Short code not found: " + shortCode)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND, "Short code not found: " + shortCode
+                        )
                 );
+    }
+
+    private Url newUrlDatabaseEntry(String url) {
+        return urlRepository.save(new Url(url, generateShortCode()));
     }
 
 }
