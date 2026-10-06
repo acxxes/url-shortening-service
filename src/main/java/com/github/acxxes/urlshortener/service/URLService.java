@@ -1,9 +1,9 @@
 package com.github.acxxes.urlshortener.service;
 
-import com.github.acxxes.urlshortener.dto.UrlResponse;
-import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
-import com.github.acxxes.urlshortener.entity.Url;
-import com.github.acxxes.urlshortener.repository.UrlRepository;
+import com.github.acxxes.urlshortener.dto.URLResponse;
+import com.github.acxxes.urlshortener.dto.URLStatsResponse;
+import com.github.acxxes.urlshortener.entity.URL;
+import com.github.acxxes.urlshortener.repository.URLRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,36 +12,36 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.UUID;
 
 @Service
-public class UrlService {
-    private final UrlRepository urlRepository;
+public class URLService {
+    private final URLRepository urlRepository;
 
-    public UrlService(UrlRepository urlRepository) {
+    public URLService(URLRepository urlRepository) {
         this.urlRepository = urlRepository;
     }
 
     // GET http://localhost:8080/shorten/{shortCode}
-    public UrlResponse findByShortCode(String shortCode) {
+    public URLResponse findByShortCode(String shortCode) {
         return urlRepository.findByShortCode(shortCode)
-                .map(UrlResponse::from)
+                .map(URLResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
                 ));
     }
 
     // GET http://localhost:8080/shorten/{shortCode}/stats
-    public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
+    public URLStatsResponse findByShortCodeWithStats(String shortCode) {
         return urlRepository.findByShortCode(shortCode)
-                .map(UrlStatsResponse::from)
+                .map(URLStatsResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
                 ));
     }
 
     // POST http://localhost:8080/shorten
-    public UrlResponse createShortUrl(String url) {
+    public URLResponse createShortUrl(String url) {
         String generatedShortCode = generateShortCode();
-        Url saved = urlRepository.save(new Url(url, generatedShortCode));
-        return UrlResponse.from(saved);
+        URL saved = urlRepository.save(new URL(url, generatedShortCode));
+        return URLResponse.from(saved);
     }
 
     // PUT http://localhost:8080/shorten/{shortCode}

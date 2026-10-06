@@ -6,7 +6,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "short_urls")
-public class Url {
+public class URL {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class Url {
     @Column(nullable = false)
     private long accessCount;
 
-    protected Url() {
+    protected URL() {
     }
 
-    public Url(String url, String shortCode) {
+    public URL(String url, String shortCode) {
         this.url = url;
         this.shortCode = shortCode;
     }
