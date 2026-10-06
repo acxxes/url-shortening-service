@@ -4,7 +4,8 @@ import com.github.acxxes.urlshortener.dto.UrlResponse;
 import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.entity.Url;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
-import jakarta.transaction.Transactional;
+
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,20 +22,14 @@ public class UrlService {
 
     // GET http://localhost:8080/shorten/{shortCode}
     public UrlResponse findByShortCode(String shortCode) {
-        return urlRepository.findByShortCode(shortCode)
-                .map(UrlResponse::from)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
-                ));
+        Url url = findUrlOrThrow(shortCode);
+        return UrlResponse.from(url);
     }
 
     // GET http://localhost:8080/shorten/{shortCode}/stats
     public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
-        return urlRepository.findByShortCode(shortCode)
-                .map(UrlStatsResponse::from)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Short_Code not found: " + shortCode
-                ));
+        Url url = findUrlOrThrow(shortCode);
+        return UrlStatsResponse.from(url);
     }
 
     // POST http://localhost:8080/shorten
@@ -45,18 +40,25 @@ public class UrlService {
     }
 
     // PUT http://localhost:8080/shorten/{shortCode}
-//    public UrlResponse updateShortUrl(String shortCode, String updatedShortCode) {
+//    public UrlResponse updateShortUrl(String shortCode, String newUrl) {
 //    }
 
     // DELETE http://localhost:8080/shorten/{shortCode}
     @Transactional
-    public void deleteByShortCode(String shortCode){
+    public void deleteByShortCode(String shortCode) {
+        findUrlOrThrow(shortCode);
         urlRepository.deleteByShortCode(shortCode);
     }
 
     // TODO phase 6
     private String generateShortCode() {
         return UUID.randomUUID().toString().substring(0, 5);
+    }
+
+    private Url findUrlOrThrow(String shortCode) {
+        return urlRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Short code not found: " + shortCode)
+                );
     }
 
 }

@@ -101,11 +101,9 @@ public class UrlController {
         urlService.deleteByShortCode(shortCode);
     }
 
-    //TODO WIP
-
-    // PUT /shorten/{shortCode}
-    @PutMapping("/{shortCode}")
-    public UrlResponse update(@PathVariable String shortCode) {
-    }
+//    // PUT /shorten/{shortCode}
+//    @PutMapping("/{shortCode}")
+//    public UrlResponse update(@PathVariable String shortCode) {
+//    }
 
 }
