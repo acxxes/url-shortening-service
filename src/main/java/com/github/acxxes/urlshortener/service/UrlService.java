@@ -4,6 +4,7 @@ import com.github.acxxes.urlshortener.dto.UrlResponse;
 import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.entity.Url;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,6 +42,16 @@ public class UrlService {
         String generatedShortCode = generateShortCode();
         Url saved = urlRepository.save(new Url(url, generatedShortCode));
         return UrlResponse.from(saved);
+    }
+
+    // PUT http://localhost:8080/shorten/{shortCode}
+//    public UrlResponse updateShortUrl(String shortCode, String updatedShortCode) {
+//    }
+
+    // DELETE http://localhost:8080/shorten/{shortCode}
+    @Transactional
+    public void deleteByShortCode(String shortCode){
+        urlRepository.deleteByShortCode(shortCode);
     }
 
     // TODO phase 6
