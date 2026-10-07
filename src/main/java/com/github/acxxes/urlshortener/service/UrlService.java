@@ -5,6 +5,8 @@ import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.entity.Url;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @Service
 public class UrlService {
+    private static final Logger log = LoggerFactory.getLogger(UrlService.class);
     private final UrlRepository urlRepository;
 
     public UrlService(UrlRepository urlRepository) {
@@ -36,13 +39,15 @@ public class UrlService {
     public UrlResponse updateUrl(String shortCode, String newUrl) {
         Url url = findUrlOrThrow(shortCode);
         url.setUrl(newUrl);
-        urlRepository.flush(); // guarantees flush before the mapping, so updatedAt gets updated
+        // guarantees flush before the mapping, so updatedAt gets updated before the next GET request
+        urlRepository.flush();
         return UrlResponse.from(url);
     }
 
     @Transactional
     public void deleteByShortCode(String shortCode) {
-        findUrlOrThrow(shortCode);
+        Url url = findUrlOrThrow(shortCode);
+        log.info("Deleting URL: {}", UrlResponse.from(url)); // {} is replaced by the argument
         urlRepository.deleteByShortCode(shortCode);
     }
 
