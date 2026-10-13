@@ -59,11 +59,8 @@ public class UrlService {
 
     private Url findUrlOrThrow(String shortCode) {
         return urlRepository.findByShortCode(shortCode)
-                .orElseThrow(
-                        () -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, "Short code not found: " + shortCode
-                        )
-                );
+                .orElseThrow(() -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND, "Short code not found: " + shortCode));
     }
 
     private Url newUrlDatabaseEntry(String url) {
