@@ -9,6 +9,7 @@ public class UrlShorteningServiceApplication {
     //TODO
     // - learn PostgreSQL, establish API with the 5 queries behind HTTP
     // - make the access_count work
+    // - implement GUI
 
     // DISPLAY LOGS
     // Get-Content logs\app.log -Wait -Tail 20

@@ -4,11 +4,12 @@ import com.github.acxxes.urlshortener.dto.UrlRequest;
 import com.github.acxxes.urlshortener.dto.UrlResponse;
 import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.service.UrlService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/shorten") // common base path for all methods
 public class UrlController {
     private final UrlService urlService;
 
@@ -24,6 +25,11 @@ public class UrlController {
         this.urlService = urlService;
     }
 
+    @GetMapping("/test")
+    public ResponseEntity redirect() {
+        return new ResponseEntity<>("Hello World", HttpStatus.OK);
+    }
+
     /**
      * Returns the short URL entry for the given code.
      * <p>
@@ -37,7 +43,7 @@ public class UrlController {
      * @param shortCode the short code from the request path
      * @return the entry, as {@link UrlResponse}
      */
-    @GetMapping("/{shortCode}")
+    @GetMapping("/shorten/{shortCode}")
     public UrlResponse get(@PathVariable String shortCode) {
         return urlService.findByShortCode(shortCode);
     }
@@ -55,7 +61,7 @@ public class UrlController {
      * @param shortCode the short code from the request path
      * @return {@link UrlStatsResponse} the entry including its access count
      */
-    @GetMapping("/{shortCode}/stats")
+    @GetMapping("/shorten/{shortCode}/stats")
     public UrlStatsResponse getStats(@PathVariable String shortCode) {
         return urlService.findByShortCodeWithStats(shortCode);
     }
@@ -101,7 +107,7 @@ public class UrlController {
      * @param urlRequest the JSON body, containing the new URL
      * @return {@link UrlResponse} the updated entry including the new URL
      */
-    @PutMapping("/{shortCode}")
+    @PutMapping("/shorten/{shortCode}")
     public UrlResponse update(@PathVariable String shortCode,
                               @RequestBody UrlRequest urlRequest) {
         return urlService.updateUrl(shortCode, urlRequest.url());
@@ -119,7 +125,7 @@ public class UrlController {
      *
      * @param shortCode the short code from the request path
      */
-    @DeleteMapping("/{shortCode}")
+    @DeleteMapping("/shorten/{shortCode}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String shortCode) {
         urlService.deleteByShortCode(shortCode);
