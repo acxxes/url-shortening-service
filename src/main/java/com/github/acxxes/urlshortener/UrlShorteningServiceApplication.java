@@ -7,9 +7,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class UrlShorteningServiceApplication {
 
     //TODO
-    // - learn PostgreSQL, establish API with the 5 queries behind HTTP
-    // - make the access_count work
-    // - implement GUI
+    // <<DONE>>
+    // - CRUD API under /shorten (create, get, stats, update, delete)
+    // - PostgreSQL + JPA, timestamps through @PrePersist/@PreUpdate
+    // - Records as DTOs, entity as a class
+    // - Schema in the repo through Flyway, checked by 'validate'
+
+    //TODO
+    // - Redirect endpoints
+    // - Count clicks
+    // - Short-code collisions
+    // - Input validation
+    // - Clean error responses
+    // - Don't expose the database id
 
     // DISPLAY LOGS
     // Get-Content logs\app.log -Wait -Tail 20
