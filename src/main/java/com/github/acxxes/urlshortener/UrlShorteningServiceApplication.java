@@ -20,6 +20,7 @@ public class UrlShorteningServiceApplication {
     // - Input validation
     // - Clean error responses
     // - Don't expose the database id
+    // ~~~
 
     // DISPLAY LOGS
     // Get-Content logs\app.log -Wait -Tail 20
