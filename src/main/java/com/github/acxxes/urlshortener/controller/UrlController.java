@@ -25,11 +25,6 @@ public class UrlController {
         this.urlService = urlService;
     }
 
-    @GetMapping("/test")
-    public ResponseEntity redirect() {
-        return new ResponseEntity<>("Hello World", HttpStatus.OK);
-    }
-
     /**
      * Returns the short URL entry for the given code.
      * <p>
@@ -83,7 +78,7 @@ public class UrlController {
      * @param urlRequest the JSON body, containing the long URL to shorten
      * @return {@link UrlResponse} the created entry including its generated short code
      */
-    @PostMapping
+    @PostMapping("/shorten")
     @ResponseStatus(HttpStatus.CREATED)
     public UrlResponse create(@RequestBody UrlRequest urlRequest) {
         return urlService.createShortUrl(urlRequest.url());
