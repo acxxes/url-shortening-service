@@ -23,6 +23,10 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
+    public UrlResponse redirectFromShortCode(String shortCode) {
+        return UrlResponse.from(findUrlOrThrow(shortCode));
+    }
+
     public UrlResponse findByShortCode(String shortCode) {
         return UrlResponse.from(findUrlOrThrow(shortCode));
     }

@@ -25,6 +25,14 @@ public class UrlController {
         this.urlService = urlService;
     }
 
+    // WIP
+    // redirect GET endpoint
+    @GetMapping("/{shortCode}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public UrlResponse getRedirect(@PathVariable String shortCode) {
+        return urlService.redirectFromShortCode(shortCode);
+    }
+
     /**
      * Returns the short URL entry for the given code.
      * <p>
