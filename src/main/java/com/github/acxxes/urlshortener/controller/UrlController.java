@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 public class UrlController {
     private final UrlService urlService;
@@ -25,12 +27,27 @@ public class UrlController {
         this.urlService = urlService;
     }
 
-    // WIP
-    // redirect GET endpoint
+    /**
+     * Redirects to the URL from the given short code.
+     * <p>
+     * Responds with 302, or 404 if the code does not exist.
+     * <p>
+     * Execute in the terminal with:
+     * <pre>{@code
+     * curl.exe -i http://localhost:8080/{shortCode}}
+     * </pre>
+     *
+     * @param shortCode
+     * @return the URI, as {@link ResponseEntity<URI>}
+     */
     @GetMapping("/{shortCode}")
     @ResponseStatus(HttpStatus.FOUND)
-    public UrlResponse getRedirect(@PathVariable String shortCode) {
-        return urlService.redirectFromShortCode(shortCode);
+    public ResponseEntity<URI> redirect(@PathVariable String shortCode) {
+        UrlResponse urlResponse = urlService.findByShortCode(shortCode);
+        String url = urlResponse.url();
+        URI uri = URI.create(url);
+        urlService.updateAccessCount(shortCode);
+        return ResponseEntity.status(HttpStatus.FOUND).location(uri).build();
     }
 
     /**

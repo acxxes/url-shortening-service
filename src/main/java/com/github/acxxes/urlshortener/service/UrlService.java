@@ -23,10 +23,6 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    public UrlResponse redirectFromShortCode(String shortCode) {
-        return UrlResponse.from(findUrlOrThrow(shortCode));
-    }
-
     public UrlResponse findByShortCode(String shortCode) {
         return UrlResponse.from(findUrlOrThrow(shortCode));
     }
@@ -53,6 +49,10 @@ public class UrlService {
         Url url = findUrlOrThrow(shortCode);
         log.info("Deleting URL: {}", UrlResponse.from(url)); // {} is replaced by the argument
         urlRepository.deleteByShortCode(shortCode);
+    }
+
+    public void updateAccessCount(String shortCode) {
+        urlRepository.incrementAccessCount(shortCode);
     }
 
     //TODO
