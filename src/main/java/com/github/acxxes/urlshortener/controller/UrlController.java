@@ -37,7 +37,7 @@ public class UrlController {
      * curl.exe -i http://localhost:8080/{shortCode}}
      * </pre>
      *
-     * @param shortCode
+     * @param shortCode the short code from the request path
      * @return the URI, as {@link ResponseEntity<URI>}
      */
     @GetMapping("/{shortCode}")
