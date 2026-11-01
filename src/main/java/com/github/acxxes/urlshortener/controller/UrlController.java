@@ -4,10 +4,10 @@ import com.github.acxxes.urlshortener.dto.UrlRequest;
 import com.github.acxxes.urlshortener.dto.UrlResponse;
 import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.service.UrlService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 
@@ -38,11 +38,11 @@ public class UrlController {
      * </pre>
      *
      * @param shortCode the short code from the request path
-     * @return the URI, as {@link ResponseEntity<URI>}
+     * @return 302 Found and Location header
+     * @throws ResponseStatusException as 404 Not Found, if the given short code does not exist.
      */
     @GetMapping("/{shortCode}")
-    @ResponseStatus(HttpStatus.FOUND)
-    public ResponseEntity<URI> redirect(@PathVariable String shortCode) {
+    public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
         UrlResponse urlResponse = urlService.findByShortCode(shortCode);
         String url = urlResponse.url();
         URI uri = URI.create(url);
