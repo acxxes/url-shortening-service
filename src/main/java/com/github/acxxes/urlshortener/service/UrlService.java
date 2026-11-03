@@ -52,6 +52,7 @@ public class UrlService {
         urlRepository.deleteByShortCode(shortCode);
     }
 
+    @Transactional
     public void updateAccessCount(String shortCode) {
         int count = urlRepository.incrementAccessCount(shortCode);
         System.err.println("Update count by: [" + count + "]");

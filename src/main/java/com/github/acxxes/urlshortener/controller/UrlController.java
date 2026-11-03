@@ -4,6 +4,7 @@ import com.github.acxxes.urlshortener.dto.UrlRequest;
 import com.github.acxxes.urlshortener.dto.UrlResponse;
 import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.service.UrlService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -105,7 +106,7 @@ public class UrlController {
      */
     @PostMapping("/shorten")
     @ResponseStatus(HttpStatus.CREATED)
-    public UrlResponse create(@RequestBody UrlRequest urlRequest) {
+    public UrlResponse create(@Valid @RequestBody UrlRequest urlRequest) {
         return urlService.createShortUrl(urlRequest.url());
     }
 
@@ -129,7 +130,7 @@ public class UrlController {
      */
     @PutMapping("/shorten/{shortCode}")
     public UrlResponse update(@PathVariable String shortCode,
-                              @RequestBody UrlRequest urlRequest) {
+                              @Valid @RequestBody UrlRequest urlRequest) {
         return urlService.updateUrl(shortCode, urlRequest.url());
     }
 
