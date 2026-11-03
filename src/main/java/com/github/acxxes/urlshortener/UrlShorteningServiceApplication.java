@@ -24,7 +24,7 @@ public class UrlShorteningServiceApplication {
 
     // DISPLAY LOGS
     // Get-Content logs\app.log -Wait -Tail 20
-    // Get-Content logs\app.log -Wait -Tail 20 | Select-String "Deleting"
+    // Get-Content logs\app.log -Wait -Tail 20 | Select-String "Deleting"wse
     // -Wait -> keeps the command running
     // -Tail -> shows the last 20 lines
 

@@ -3,6 +3,7 @@ package com.github.acxxes.urlshortener.service;
 import com.github.acxxes.urlshortener.dto.UrlResponse;
 import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.entity.Url;
+import com.github.acxxes.urlshortener.exception.ShortCodeNotFoundException;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
 
 import org.slf4j.Logger;
@@ -52,7 +53,11 @@ public class UrlService {
     }
 
     public void updateAccessCount(String shortCode) {
-        urlRepository.incrementAccessCount(shortCode);
+        int count = urlRepository.incrementAccessCount(shortCode);
+        System.err.println("Update count by: [" + count + "]");
+        if (count == 0) {
+            throw new ShortCodeNotFoundException("The short code: [" + shortCode + "] does not exist");
+        }
     }
 
     //TODO
