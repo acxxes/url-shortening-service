@@ -48,7 +48,7 @@ public class UrlService {
     @Transactional
     public void deleteByShortCode(String shortCode) {
         Url url = findUrlOrThrow(shortCode);
-        log.info("Deleting URL: {}", UrlResponse.from(url)); // {} is replaced by the argument
+        log.info("Deleting URL: id={} {}", url.getId(), UrlResponse.from(url)); // {} is replaced by the argument
         urlRepository.deleteByShortCode(shortCode);
     }
 
