@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URI;
 import java.util.UUID;
 
 @Service
@@ -22,6 +23,13 @@ public class UrlService {
 
     public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
+    }
+
+    public URI createURIAndUpdateAccessCount(String shortCode) {
+        UrlResponse urlResponse = findByShortCode(shortCode);
+        String url = urlResponse.url();
+        updateAccessCount(shortCode);
+        return URI.create(url);
     }
 
     public UrlResponse findByShortCode(String shortCode) {

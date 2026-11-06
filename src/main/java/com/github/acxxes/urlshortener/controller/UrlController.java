@@ -44,11 +44,10 @@ public class UrlController {
      */
     @GetMapping("/{shortCode}")
     public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
-        UrlResponse urlResponse = urlService.findByShortCode(shortCode);
-        String url = urlResponse.url();
-        URI uri = URI.create(url);
-        urlService.updateAccessCount(shortCode);
-        return ResponseEntity.status(HttpStatus.FOUND).location(uri).build();
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .location(urlService.createURIAndUpdateAccessCount(shortCode))
+                .build();
     }
 
     /**
