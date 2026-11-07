@@ -18,7 +18,6 @@ public interface UrlRepository extends JpaRepository<Url, Long> { // <EntityType
     void deleteByShortCode(String shortCode);
 
     @Modifying
-    @Transactional
     @Query("UPDATE Url u SET u.accessCount = u.accessCount + 1 WHERE shortCode = :sc")
     int incrementAccessCount(@Param("sc") String sc);
 

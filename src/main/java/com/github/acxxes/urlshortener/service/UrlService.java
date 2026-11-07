@@ -25,13 +25,6 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    public URI createURIAndUpdateAccessCount(String shortCode) {
-        UrlResponse urlResponse = findByShortCode(shortCode);
-        String url = urlResponse.url();
-        updateAccessCount(shortCode);
-        return URI.create(url);
-    }
-
     public UrlResponse findByShortCode(String shortCode) {
         return UrlResponse.from(findUrlOrThrow(shortCode));
     }
@@ -42,6 +35,14 @@ public class UrlService {
 
     public UrlResponse createShortUrl(String url) {
         return UrlResponse.from(newUrlDatabaseEntry(url));
+    }
+
+    @Transactional
+    public URI createURIAndUpdateAccessCount(String shortCode) {
+        UrlResponse urlResponse = findByShortCode(shortCode);
+        String url = urlResponse.url();
+        updateAccessCount(shortCode);
+        return URI.create(url);
     }
 
     @Transactional
