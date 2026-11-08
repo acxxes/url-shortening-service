@@ -9,9 +9,7 @@ import com.github.acxxes.urlshortener.repository.UrlRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.UUID;
@@ -23,18 +21,6 @@ public class UrlService {
 
     public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
-    }
-
-    public UrlResponse findByShortCode(String shortCode) {
-        return UrlResponse.from(findUrlOrThrow(shortCode));
-    }
-
-    public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
-        return UrlStatsResponse.from(findUrlOrThrow(shortCode));
-    }
-
-    public UrlResponse createShortUrl(String url) {
-        return UrlResponse.from(newUrlDatabaseEntry(url));
     }
 
     @Transactional
@@ -61,25 +47,33 @@ public class UrlService {
         urlRepository.deleteByShortCode(shortCode);
     }
 
-    @Transactional
+    public UrlResponse findByShortCode(String shortCode) {
+        return UrlResponse.from(findUrlOrThrow(shortCode));
+    }
+
+    public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
+        return UrlStatsResponse.from(findUrlOrThrow(shortCode));
+    }
+
+    public UrlResponse createShortUrl(String url) {
+        return UrlResponse.from(newUrlDatabaseEntry(url));
+    }
+
     public void updateAccessCount(String shortCode) {
         int count = urlRepository.incrementAccessCount(shortCode);
         System.err.println("Update count by: [" + count + "]");
         if (count == 0) {
-            throw new ShortCodeNotFoundException("The short code: [" + shortCode + "] does not exist");
+            throw new ShortCodeNotFoundException(shortCode);
         }
     }
 
-    //TODO
-    // - phase 6
     private String generateShortCode() {
         return UUID.randomUUID().toString().substring(0, 5);
     }
 
     private Url findUrlOrThrow(String shortCode) {
         return urlRepository.findByShortCode(shortCode)
-                .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, "Short code not found: " + shortCode));
+                .orElseThrow(() -> new ShortCodeNotFoundException(shortCode));
     }
 
     private Url newUrlDatabaseEntry(String url) {
