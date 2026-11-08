@@ -40,7 +40,8 @@ public class UrlController {
      *
      * @param shortCode the short code from the request path
      * @return 302 Found and Location header
-     * @throws ResponseStatusException as 404 Not Found, if the given short code does not exist.
+     * @throws com.github.acxxes.urlshortener.exception.ShortCodeNotFoundException as 404 Not Found,
+     * if the given short code does not exist.
      */
     @GetMapping("/{shortCode}")
     public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
