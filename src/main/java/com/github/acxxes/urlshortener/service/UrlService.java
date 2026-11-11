@@ -6,18 +6,20 @@ import com.github.acxxes.urlshortener.entity.Url;
 import com.github.acxxes.urlshortener.exception.ShortCodeNotFoundException;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
 
+import com.github.acxxes.urlshortener.utility.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.util.UUID;
+import java.security.SecureRandom;
 
 @Service
 public class UrlService {
     private static final Logger log = LoggerFactory.getLogger(UrlService.class);
     private final UrlRepository urlRepository;
+    private static final SecureRandom random = new SecureRandom();
 
     public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
@@ -67,9 +69,14 @@ public class UrlService {
         }
     }
 
-    private String generateShortCode() {
-
-        return UUID.randomUUID().toString().substring(0, 5);
+    private String generateBase62Encoding() {
+        StringBuilder builder = new StringBuilder();
+        int n;
+        for (int i = 0; i < Constants.CODE_LENGTH; i++) {
+            n = random.nextInt(Constants.BASE62_LETTERS.length());
+            builder.append(Constants.BASE62_LETTERS.charAt(n));
+        }
+        return builder.toString();
     }
 
     private Url findUrlOrThrow(String shortCode) {
@@ -78,7 +85,7 @@ public class UrlService {
     }
 
     private Url newUrlDatabaseEntry(String url) {
-        return urlRepository.save(new Url(url, generateShortCode()));
+        return urlRepository.save(new Url(url, generateBase62Encoding()));
     }
 
 }
