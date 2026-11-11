@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class UrlShorteningServiceApplication {
 
     //TODO
-    // - change UUID encoding to Base62 for generateShortCode()
+    // ~~~
 
     // DISPLAY LOGS
     // Get-Content logs\app.log -Wait -Tail 20
