@@ -70,12 +70,17 @@ public class UrlService {
     }
 
     private String generateBase62Encoding() {
-        StringBuilder builder = new StringBuilder();
         int n;
-        for (int i = 0; i < Constants.CODE_LENGTH; i++) {
-            n = random.nextInt(Constants.BASE62_LETTERS.length());
-            builder.append(Constants.BASE62_LETTERS.charAt(n));
-        }
+        StringBuilder builder = new StringBuilder();
+
+        do {
+            builder.delete(0,Constants.CODE_LENGTH);
+            for (int i = 0; i < Constants.CODE_LENGTH; i++) {
+                n = random.nextInt(Constants.BASE62_LETTERS.length());
+                builder.append(Constants.BASE62_LETTERS.charAt(n));
+            }
+        } while (urlRepository.existsByShortCode(builder.toString()));
+
         return builder.toString();
     }
 

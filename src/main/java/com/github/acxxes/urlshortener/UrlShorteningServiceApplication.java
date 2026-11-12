@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class UrlShorteningServiceApplication {
 
     //TODO
-    // ~~~
+    // - handle race conditions when two users create a short code
 
     // DISPLAY LOGS
     // Get-Content logs\app.log -Wait -Tail 20
