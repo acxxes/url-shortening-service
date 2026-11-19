@@ -5,7 +5,6 @@ import com.github.acxxes.urlshortener.dto.UrlStatsResponse;
 import com.github.acxxes.urlshortener.entity.Url;
 import com.github.acxxes.urlshortener.exception.ShortCodeNotFoundException;
 import com.github.acxxes.urlshortener.repository.UrlRepository;
-
 import com.github.acxxes.urlshortener.utility.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +32,18 @@ public class UrlService {
         return URI.create(url);
     }
 
+    public UrlResponse findByShortCode(String shortCode) {
+        return UrlResponse.from(findUrlOrThrow(shortCode));
+    }
+
+    public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
+        return UrlStatsResponse.from(findUrlOrThrow(shortCode));
+    }
+
+    public UrlResponse createShortUrl(String url) {
+        return UrlResponse.from(newUrlDatabaseEntry(url));
+    }
+
     @Transactional
     public UrlResponse updateUrl(String shortCode, String newUrl) {
         Url url = findUrlOrThrow(shortCode);
@@ -49,39 +60,12 @@ public class UrlService {
         urlRepository.deleteByShortCode(shortCode);
     }
 
-    public UrlResponse findByShortCode(String shortCode) {
-        return UrlResponse.from(findUrlOrThrow(shortCode));
-    }
-
-    public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
-        return UrlStatsResponse.from(findUrlOrThrow(shortCode));
-    }
-
-    public UrlResponse createShortUrl(String url) {
-        return UrlResponse.from(newUrlDatabaseEntry(url));
-    }
-
     public void updateAccessCount(String shortCode) {
         int count = urlRepository.incrementAccessCount(shortCode);
         System.err.println("Update count by: [" + count + "]");
         if (count == 0) {
             throw new ShortCodeNotFoundException(shortCode);
         }
-    }
-
-    private String generateBase62Encoding() {
-        int n;
-        StringBuilder builder = new StringBuilder();
-
-        do {
-            builder.delete(0,Constants.CODE_LENGTH);
-            for (int i = 0; i < Constants.CODE_LENGTH; i++) {
-                n = random.nextInt(Constants.BASE62_LETTERS.length());
-                builder.append(Constants.BASE62_LETTERS.charAt(n));
-            }
-        } while (urlRepository.existsByShortCode(builder.toString()));
-
-        return builder.toString();
     }
 
     private Url findUrlOrThrow(String shortCode) {
@@ -91,6 +75,21 @@ public class UrlService {
 
     private Url newUrlDatabaseEntry(String url) {
         return urlRepository.save(new Url(url, generateBase62Encoding()));
+    }
+
+    private String generateBase62Encoding() {
+        int n;
+        StringBuilder builder = new StringBuilder();
+
+        do {
+            builder.delete(0, Constants.CODE_LENGTH);
+            for (int i = 0; i < Constants.CODE_LENGTH; i++) {
+                n = random.nextInt(Constants.BASE62_LETTERS.length());
+                builder.append(Constants.BASE62_LETTERS.charAt(n));
+            }
+        } while (urlRepository.existsByShortCode(builder.toString()));
+
+        return builder.toString();
     }
 
 }
