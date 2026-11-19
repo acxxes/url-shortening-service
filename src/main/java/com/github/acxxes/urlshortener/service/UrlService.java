@@ -24,6 +24,7 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
+    // GET Redirect
     @Transactional
     public URI createURIAndUpdateAccessCount(String shortCode) {
         UrlResponse urlResponse = findByShortCode(shortCode);
@@ -32,18 +33,22 @@ public class UrlService {
         return URI.create(url);
     }
 
+    // GET
     public UrlResponse findByShortCode(String shortCode) {
         return UrlResponse.from(findUrlOrThrow(shortCode));
     }
 
+    // GET + Stats
     public UrlStatsResponse findByShortCodeWithStats(String shortCode) {
         return UrlStatsResponse.from(findUrlOrThrow(shortCode));
     }
 
+    // POST
     public UrlResponse createShortUrl(String url) {
         return UrlResponse.from(newUrlDatabaseEntry(url));
     }
 
+    // PUT
     @Transactional
     public UrlResponse updateUrl(String shortCode, String newUrl) {
         Url url = findUrlOrThrow(shortCode);
@@ -53,6 +58,7 @@ public class UrlService {
         return UrlResponse.from(url);
     }
 
+    // DELETE
     @Transactional
     public void deleteByShortCode(String shortCode) {
         Url url = findUrlOrThrow(shortCode);
