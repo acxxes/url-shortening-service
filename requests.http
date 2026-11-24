@@ -1,8 +1,110 @@
 @host = http://localhost:8080
-@shortCode = yt-music
 
-### GET
+### Create a short URL (stores the code for the requests below)
+POST {{host}}/shorten
+Content-Type: application/json
+
+< ./http-tests/create.json
+
+> {%
+    client.test("Created", () => client.assert(response.status === 201, "Expected 201, got " + response.status));
+    client.global.set("shortCode", response.body.shortCode);
+    client.global.set("originalUrl", response.body.url);
+%}
+
+### Get the short URL
 GET {{host}}/shorten/{{shortCode}}
 
-### GET unknown input -> expecting 404 error
+> {%
+    client.test("Found", () => client.assert(response.status === 200));
+    client.test("Original URL", () => client.assert(response.body.url === client.global.get("originalUrl")));
+%}
+
+### Redirect (no-redirect so we see the 302 itself)
+# @no-redirect
+GET {{host}}/{{shortCode}}
+
+> {%
+    client.test("Redirects", () => client.assert(response.status === 302, "Expected 302, got " + response.status));
+    client.test("Location", () => client.assert(response.headers.valueOf("Location") === client.global.get("originalUrl")));
+%}
+
+### Stats
+GET {{host}}/shorten/{{shortCode}}/stats
+
+> {%
+    client.test("Stats", () => client.assert(response.status === 200));
+    client.test("Counted the redirect", () => client.assert(response.body.accessCount >= 1));
+%}
+
+### Update
+PUT {{host}}/shorten/{{shortCode}}
+Content-Type: application/json
+
+< ./http-tests/update.json
+
+> {%
+    client.test("Updated", () => client.assert(response.status === 200));
+    client.test("Same code", () => client.assert(response.body.shortCode === client.global.get("shortCode")));
+%}
+
+### Delete
+DELETE {{host}}/shorten/{{shortCode}}
+
+> {%
+    client.test("Deleted", () => client.assert(response.status === 204));
+%}
+
+### Get after delete -> 404
+GET {{host}}/shorten/{{shortCode}}
+
+> {%
+    client.test("Gone", () => client.assert(response.status === 404));
+%}
+
+### Unknown code -> 404
 GET {{host}}/shorten/does-not-exist
+
+> {%
+    client.test("Not found", () => client.assert(response.status === 404));
+%}
+
+### Invalid protocol -> 400
+POST {{host}}/shorten
+Content-Type: application/json
+
+< ./http-tests/create-invalid-protocol.json
+
+> {%
+    client.test("Rejected", () => client.assert(response.status === 400));
+%}
+
+### javascript: scheme -> 400
+POST {{host}}/shorten
+Content-Type: application/json
+
+< ./http-tests/create-javascript.json
+
+> {%
+    client.test("Rejected", () => client.assert(response.status === 400));
+%}
+
+### Blank url -> 400
+POST {{host}}/shorten
+Content-Type: application/json
+
+< ./http-tests/create-blank.json
+
+> {%
+    client.test("Rejected", () => client.assert(response.status === 400));
+%}
+
+### Malformed JSON -> 400
+POST {{host}}/shorten
+Content-Type: application/json
+
+< ./http-tests/create-malformed.json
+
+> {%
+    client.test("Rejected", () => client.assert(response.status === 400));
+%}
